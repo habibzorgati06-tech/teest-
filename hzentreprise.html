@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HZ Entreprise – Carrosserie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --red: #D91E18; --red-dark: #AA1510; --black: #111111; --gray: #555; --light: #F5F5F5; --white: #FFFFFF; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+    body[dir="rtl"] { font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 70px;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--red);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--black); }
+    .nav-logo span { color: var(--red); }
+    .nav-right { display: flex; align-items: center; gap: 32px; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); transition: color .2s; }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta { background: var(--red); color: white !important; padding: 10px 22px; border-radius: 4px; transition: background .2s !important; }
+    .nav-cta:hover { background: var(--red-dark) !important; }
+
+    /* LANGUAGE SWITCHER */
+    .lang-switcher { position: relative; }
+    .lang-btn {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--light); border: 1.5px solid #ddd;
+      border-radius: 6px; padding: 7px 13px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: border-color .2s, background .2s;
+      white-space: nowrap; user-select: none;
+    }
+    .lang-btn:hover { border-color: var(--red); background: #fff; }
+    .lang-arrow { font-size: 9px; color: var(--gray); transition: transform .2s; margin-left: 2px; }
+    .lang-switcher.open .lang-btn { border-color: var(--red); background: #fff; }
+    .lang-switcher.open .lang-arrow { transform: rotate(180deg); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: white; border: 1.5px solid #e0e0e0;
+      border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+      overflow: hidden; min-width: 148px;
+      opacity: 0; transform: translateY(-8px) scale(0.97); pointer-events: none;
+      transition: opacity .2s, transform .2s;
+      z-index: 200;
+    }
+    .lang-switcher.open .lang-dropdown { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; cursor: pointer;
+      font-size: 13px; font-weight: 500;
+      transition: background .15s;
+    }
+    .lang-option:hover { background: var(--light); }
+    .lang-option.active { color: var(--red); font-weight: 700; background: #fff5f5; }
+    .lang-option .flag { font-size: 17px; }
+
+    /* HERO */
+    #accueil { min-height: 100vh; display: flex; align-items: center; padding: 100px 48px 60px; position: relative; overflow: hidden; background: #fff; }
+    .hero-bg-shape { position: absolute; right: -80px; top: 0; width: 55%; height: 100%; background: var(--red); clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%); z-index: 0; }
+    .hero-bg-lines { position: absolute; right: 0; top: 0; width: 55%; height: 100%; z-index: 1; opacity: 0.06; background-image: repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 40px); }
+    body[dir="rtl"] .hero-bg-shape { right: auto; left: -80px; clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%); }
+    body[dir="rtl"] .hero-bg-lines { right: auto; left: 0; }
+    .hero-content { position: relative; z-index: 2; max-width: 580px; animation: fadeUp .8s ease both; }
+    .hero-tag { display: inline-block; background: var(--red); color: white; font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 6px 14px; border-radius: 2px; margin-bottom: 24px; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 8vw, 100px); line-height: .95; letter-spacing: 2px; color: var(--black); margin-bottom: 24px; }
+    body[dir="rtl"] .hero-title { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.15; }
+    .hero-title span { color: var(--red); }
+    .hero-sub { font-size: 16px; color: var(--gray); line-height: 1.7; max-width: 440px; margin-bottom: 40px; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary { background: var(--red); color: white; padding: 14px 32px; border-radius: 4px; font-weight: 600; font-size: 14px; letter-spacing: 1px; text-decoration: none; text-transform: uppercase; transition: background .2s, transform .2s; display: inline-block; }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .btn-outline { border: 2px solid var(--black); color: var(--black); padding: 13px 32px; border-radius: 4px; font-weight: 600; font-size: 14px; letter-spacing: 1px; text-decoration: none; text-transform: uppercase; transition: all .2s; display: inline-block; }
+    .btn-outline:hover { background: var(--black); color: white; transform: translateY(-2px); }
+    .hero-stats { display: flex; gap: 40px; margin-top: 60px; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--red); line-height: 1; }
+    .stat-label { font-size: 12px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    section { padding: 100px 48px; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 60px); letter-spacing: 2px; line-height: 1; margin-bottom: 20px; }
+    body[dir="rtl"] .section-title { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: clamp(30px, 4vw, 48px); }
+    .section-subtitle { font-size: 15px; color: var(--gray); max-width: 480px; line-height: 1.7; margin-bottom: 60px; }
+
+    #services { background: var(--light); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .service-card { background: white; border-radius: 8px; padding: 36px 30px; border-top: 4px solid transparent; box-shadow: 0 4px 24px rgba(0,0,0,0.06); transition: border-color .3s, transform .3s, box-shadow .3s; }
+    .service-card:hover { border-color: var(--red); transform: translateY(-6px); box-shadow: 0 12px 40px rgba(217,30,24,0.12); }
+    .service-icon { font-size: 36px; margin-bottom: 20px; }
+    .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 12px; }
+    body[dir="rtl"] .service-name { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 18px; font-weight: 700; }
+    .service-desc { font-size: 14px; color: var(--gray); line-height: 1.7; }
+
+    #horaires { background: var(--black); color: white; }
+    #horaires .section-title { color: white; }
+    #horaires .section-subtitle { color: #aaa; }
+    .hours-grid { display: grid; gap: 2px; background: #222; border-radius: 8px; overflow: hidden; max-width: 680px; }
+    .hours-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; background: #1a1a1a; transition: background .2s; }
+    .hours-row:hover { background: #222; }
+    .hours-day { font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .hours-time { font-size: 14px; color: #bbb; }
+    .hours-closed { color: var(--red); font-weight: 600; }
+    .hours-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(217,30,24,0.15); border: 1px solid rgba(217,30,24,0.3); color: #ff6b6b; padding: 8px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 40px; }
+    .dot { width: 8px; height: 8px; background: #ff6b6b; border-radius: 50%; animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    #contact { background: white; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .contact-info { display: flex; flex-direction: column; gap: 28px; }
+    .contact-item { display: flex; align-items: flex-start; gap: 16px; }
+    .contact-icon-box { width: 48px; height: 48px; background: var(--red); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .contact-detail strong { display: block; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-bottom: 4px; }
+    .contact-detail span { font-size: 16px; font-weight: 500; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); }
+    .form-group input, .form-group textarea, .form-group select { padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 14px; transition: border-color .2s; background: white; outline: none; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--red); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .btn-submit { background: var(--red); color: white; border: none; padding: 15px 32px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .2s; align-self: flex-start; }
+    .btn-submit:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+    footer { background: #0a0a0a; color: white; padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; }
+    .footer-logo span { color: var(--red); }
+    footer p { font-size: 13px; color: #666; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      section { padding: 70px 20px; }
+      #accueil { padding: 100px 20px 60px; }
+      .hero-title { font-size: 54px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">HZ<span>ENTREPRISE</span></div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#accueil" data-i18n="nav_home">Accueil</a></li>
+      <li><a href="#services" data-i18n="nav_services">Services</a></li>
+      <li><a href="#horaires" data-i18n="nav_hours">Horaires</a></li>
+      <li><a href="#contact" class="nav-cta" data-i18n="nav_quote">Devis gratuit</a></li>
+    </ul>
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-btn" id="langBtn" type="button">
+        <span id="currentFlag">🇫🇷</span>
+        <span id="currentLabel">Français</span>
+        <span class="lang-arrow">▼</span>
+      </button>
+      <div class="lang-dropdown" id="langDropdown">
+        <div class="lang-option active" data-lang="fr"><span class="flag">🇫🇷</span> Français</div>
+        <div class="lang-option" data-lang="en"><span class="flag">🇬🇧</span> English</div>
+        <div class="lang-option" data-lang="ar"><span class="flag">🇸🇦</span> العربية</div>
+        <div class="lang-option" data-lang="it"><span class="flag">🇮🇹</span> Italiano</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section id="accueil">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-bg-lines"></div>
+  <div class="hero-content">
+    <div class="hero-tag" data-i18n="hero_tag">Carrosserie Professionnelle</div>
+    <h1 class="hero-title"><span data-i18n="hero_title">Votre Véhicule</span><br><span data-i18n="hero_title_span" style="color:var(--red)">Remis à Neuf</span></h1>
+    <p class="hero-sub" data-i18n="hero_sub">HZ Entreprise, votre expert carrossier de confiance. Réparation, peinture, débosselage — nous redonnons vie à votre véhicule avec précision et soin.</p>
+    <div class="hero-buttons">
+      <a href="#contact" class="btn-primary" data-i18n="hero_cta1">Demander un devis</a>
+      <a href="#services" class="btn-outline" data-i18n="hero_cta2">Nos services</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">100%</div><div class="stat-label" data-i18n="stat1">Satisfaction client</div></div>
+      <div><div class="stat-num">+500</div><div class="stat-label" data-i18n="stat2">Véhicules réparés</div></div>
+      <div><div class="stat-num">10+</div><div class="stat-label" data-i18n="stat3">Ans d'expérience</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="reveal">
+    <div class="section-label" data-i18n="services_label">Ce que nous faisons</div>
+    <h2 class="section-title" data-i18n="services_title">Nos Prestations</h2>
+    <p class="section-subtitle" data-i18n="services_sub">Des interventions de qualité pour tous types de véhicules, réalisées par des professionnels certifiés.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card"><div class="service-icon">🔨</div><div class="service-name" data-i18n="s1_name">Débosselage & Redressage</div><p class="service-desc" data-i18n="s1_desc">Remise en forme de votre carrosserie après choc ou accrochage, avec un résultat impeccable et durable.</p></div>
+    <div class="service-card"><div class="service-icon">🎨</div><div class="service-name" data-i18n="s2_name">Peinture & Retouche</div><p class="service-desc" data-i18n="s2_desc">Application de peinture teintée à l'identique, retouches localisées ou peinture complète du véhicule.</p></div>
+    <div class="service-card"><div class="service-icon">🚗</div><div class="service-name" data-i18n="s3_name">Remplacement de pièces</div><p class="service-desc" data-i18n="s3_desc">Remplacement de pare-chocs, ailes, portes et tous éléments de carrosserie endommagés.</p></div>
+    <div class="service-card"><div class="service-icon">🔧</div><div class="service-name" data-i18n="s4_name">Traitement Anti-Rouille</div><p class="service-desc" data-i18n="s4_desc">Protection et traitement de la rouille pour prolonger la durée de vie de votre carrosserie.</p></div>
+    <div class="service-card"><div class="service-icon">✨</div><div class="service-name" data-i18n="s5_name">Polissage & Lustrage</div><p class="service-desc" data-i18n="s5_desc">Restauration de l'éclat de votre peinture, élimination des micro-rayures et finition brillante.</p></div>
+    <div class="service-card"><div class="service-icon">📋</div><div class="service-name" data-i18n="s6_name">Expertise & Devis</div><p class="service-desc" data-i18n="s6_desc">Évaluation gratuite des dégâts et établissement d'un devis détaillé et transparent.</p></div>
+  </div>
+</section>
+
+<section id="horaires">
+  <div class="reveal">
+    <div class="section-label" style="color:#ff6b6b" data-i18n="hours_label">Nos horaires</div>
+    <h2 class="section-title" data-i18n="hours_title">Quand Nous Trouver</h2>
+    <p class="section-subtitle" data-i18n="hours_sub">Notre atelier est ouvert du lundi au vendredi. Venez nous rendre visite ou appelez-nous pour convenir d'un rendez-vous.</p>
+    <div class="hours-badge"><div class="dot"></div><span data-i18n="hours_open">Ouvert aujourd'hui</span></div>
+  </div>
+  <div class="hours-grid reveal">
+    <div class="hours-row"><span class="hours-day" data-i18n="day_mon">Lundi</span><span class="hours-time">08:00 – 18:00</span></div>
+    <div class="hours-row"><span class="hours-day" data-i18n="day_tue">Mardi</span><span class="hours-time">08:00 – 18:00</span></div>
+    <div class="hours-row"><span class="hours-day" data-i18n="day_wed">Mercredi</span><span class="hours-time">08:00 – 18:00</span></div>
+    <div class="hours-row"><span class="hours-day" data-i18n="day_thu">Jeudi</span><span class="hours-time">08:00 – 18:00</span></div>
+    <div class="hours-row"><span class="hours-day" data-i18n="day_fri">Vendredi</span><span class="hours-time">08:00 – 17:00</span></div>
+    <div class="hours-row"><span class="hours-day" data-i18n="day_sat">Samedi</span><span class="hours-time">09:00 – 12:00</span></div>
+    <div class="hours-row"><span class="hours-day" data-i18n="day_sun">Dimanche</span><span class="hours-time hours-closed" data-i18n="closed">Fermé</span></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="reveal">
+    <div class="section-label" data-i18n="contact_label">Nous contacter</div>
+    <h2 class="section-title" data-i18n="contact_title">Devis Gratuit</h2>
+    <p class="section-subtitle" data-i18n="contact_sub">Remplissez le formulaire ou contactez-nous directement. Nous vous répondrons dans les plus brefs délais.</p>
+  </div>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <div class="contact-item"><div class="contact-icon-box">📍</div><div class="contact-detail"><strong data-i18n="addr_label">Adresse</strong><span>9 Rue de la Madeleine</span></div></div>
+      <div class="contact-item"><div class="contact-icon-box">📞</div><div class="contact-detail"><strong data-i18n="phone_label">Téléphone</strong><span>07 34 56 37</span></div></div>
+      <div class="contact-item"><div class="contact-icon-box">✉️</div><div class="contact-detail"><strong data-i18n="email_label">Email</strong><span>habibzz06@gmail.com</span></div></div>
+    </div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group"><label data-i18n="form_name">Prénom & Nom</label><input type="text" data-i18n-ph="form_name_ph" placeholder="Jean Dupont" required></div>
+        <div class="form-group"><label data-i18n="form_phone">Téléphone</label><input type="tel" data-i18n-ph="form_phone_ph" placeholder="06 00 00 00 00"></div>
+      </div>
+      <div class="form-group"><label data-i18n="form_email">Email</label><input type="email" data-i18n-ph="form_email_ph" placeholder="votre@email.com" required></div>
+      <div class="form-group">
+        <label data-i18n="form_service">Type de prestation</label>
+        <select>
+          <option data-i18n="form_service_default">Choisir une prestation</option>
+          <option data-i18n="s1_name">Débosselage / Redressage</option>
+          <option data-i18n="s2_name">Peinture / Retouche</option>
+          <option data-i18n="s3_name">Remplacement de pièces</option>
+          <option data-i18n="s4_name">Traitement anti-rouille</option>
+          <option data-i18n="s5_name">Polissage / Lustrage</option>
+        </select>
+      </div>
+      <div class="form-group"><label data-i18n="form_msg">Message</label><textarea data-i18n-ph="form_msg_ph" placeholder="Décrivez votre véhicule et les dommages constatés..."></textarea></div>
+      <button type="submit" class="btn-submit" data-i18n="form_send">Envoyer ma demande →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">HZ<span>ENTREPRISE</span></div>
+  <p>© 2025 HZ Entreprise – <span data-i18n="footer_rights">Tous droits réservés</span></p>
+  <p>9 Rue de la Madeleine · 07 34 56 37 · habibzz06@gmail.com</p>
+</footer>
+
+<script>
+const T = {
+  fr: {
+    nav_home:"Accueil",nav_services:"Services",nav_hours:"Horaires",nav_quote:"Devis gratuit",
+    hero_tag:"Carrosserie Professionnelle",hero_title:"Votre Véhicule",hero_title_span:"Remis à Neuf",
+    hero_sub:"HZ Entreprise, votre expert carrossier de confiance. Réparation, peinture, débosselage — nous redonnons vie à votre véhicule avec précision et soin.",
+    hero_cta1:"Demander un devis",hero_cta2:"Nos services",
+    stat1:"Satisfaction client",stat2:"Véhicules réparés",stat3:"Ans d'expérience",
+    services_label:"Ce que nous faisons",services_title:"Nos Prestations",
+    services_sub:"Des interventions de qualité pour tous types de véhicules, réalisées par des professionnels certifiés.",
+    s1_name:"Débosselage & Redressage",s1_desc:"Remise en forme de votre carrosserie après choc ou accrochage, avec un résultat impeccable et durable.",
+    s2_name:"Peinture & Retouche",s2_desc:"Application de peinture teintée à l'identique, retouches localisées ou peinture complète du véhicule.",
+    s3_name:"Remplacement de pièces",s3_desc:"Remplacement de pare-chocs, ailes, portes et tous éléments de carrosserie endommagés.",
+    s4_name:"Traitement Anti-Rouille",s4_desc:"Protection et traitement de la rouille pour prolonger la durée de vie de votre carrosserie.",
+    s5_name:"Polissage & Lustrage",s5_desc:"Restauration de l'éclat de votre peinture, élimination des micro-rayures et finition brillante.",
+    s6_name:"Expertise & Devis",s6_desc:"Évaluation gratuite des dégâts et établissement d'un devis détaillé et transparent.",
+    hours_label:"Nos horaires",hours_title:"Quand Nous Trouver",
+    hours_sub:"Notre atelier est ouvert du lundi au vendredi. Venez nous rendre visite ou appelez-nous pour convenir d'un rendez-vous.",
+    hours_open:"Ouvert aujourd'hui",
+    day_mon:"Lundi",day_tue:"Mardi",day_wed:"Mercredi",day_thu:"Jeudi",day_fri:"Vendredi",day_sat:"Samedi",day_sun:"Dimanche",closed:"Fermé",
+    contact_label:"Nous contacter",contact_title:"Devis Gratuit",
+    contact_sub:"Remplissez le formulaire ou contactez-nous directement. Nous vous répondrons dans les plus brefs délais.",
+    addr_label:"Adresse",phone_label:"Téléphone",email_label:"Email",
+    form_name:"Prénom & Nom",form_name_ph:"Jean Dupont",
+    form_phone:"Téléphone",form_phone_ph:"06 00 00 00 00",
+    form_email:"Email",form_email_ph:"votre@email.com",
+    form_service:"Type de prestation",form_service_default:"Choisir une prestation",
+    form_msg:"Message",form_msg_ph:"Décrivez votre véhicule et les dommages constatés...",
+    form_send:"Envoyer ma demande →",form_sent:"✓ Message envoyé !",
+    footer_rights:"Tous droits réservés"
+  },
+  en: {
+    nav_home:"Home",nav_services:"Services",nav_hours:"Hours",nav_quote:"Free Quote",
+    hero_tag:"Professional Body Shop",hero_title:"Your Vehicle",hero_title_span:"Restored Like New",
+    hero_sub:"HZ Entreprise, your trusted auto body expert. Repair, painting, dent removal — we bring your vehicle back to life with precision and care.",
+    hero_cta1:"Get a Quote",hero_cta2:"Our Services",
+    stat1:"Customer Satisfaction",stat2:"Vehicles Repaired",stat3:"Years of Experience",
+    services_label:"What we do",services_title:"Our Services",
+    services_sub:"Quality work for all types of vehicles, performed by certified professionals.",
+    s1_name:"Dent Removal & Straightening",s1_desc:"Reshaping your bodywork after a collision or scrape, with a flawless and lasting result.",
+    s2_name:"Paint & Touch-Up",s2_desc:"Exact color-matched paint application, spot repairs, or full vehicle repaints.",
+    s3_name:"Parts Replacement",s3_desc:"Replacement of bumpers, fenders, doors, and any damaged body components.",
+    s4_name:"Anti-Rust Treatment",s4_desc:"Rust protection and treatment to extend the life of your bodywork.",
+    s5_name:"Polishing & Buffing",s5_desc:"Restoring your paint's shine, removing micro-scratches, and achieving a brilliant finish.",
+    s6_name:"Assessment & Quote",s6_desc:"Free damage evaluation and detailed, transparent quote.",
+    hours_label:"Our hours",hours_title:"When to Find Us",
+    hours_sub:"Our workshop is open Monday to Friday. Come visit us or call to schedule an appointment.",
+    hours_open:"Open today",
+    day_mon:"Monday",day_tue:"Tuesday",day_wed:"Wednesday",day_thu:"Thursday",day_fri:"Friday",day_sat:"Saturday",day_sun:"Sunday",closed:"Closed",
+    contact_label:"Contact us",contact_title:"Free Quote",
+    contact_sub:"Fill out the form or contact us directly. We will get back to you as soon as possible.",
+    addr_label:"Address",phone_label:"Phone",email_label:"Email",
+    form_name:"First & Last Name",form_name_ph:"John Smith",
+    form_phone:"Phone",form_phone_ph:"+33 6 00 00 00 00",
+    form_email:"Email",form_email_ph:"your@email.com",
+    form_service:"Type of Service",form_service_default:"Choose a service",
+    form_msg:"Message",form_msg_ph:"Describe your vehicle and the damage observed...",
+    form_send:"Send Request →",form_sent:"✓ Message sent!",
+    footer_rights:"All rights reserved"
+  },
+  ar: {
+    nav_home:"الرئيسية",nav_services:"الخدمات",nav_hours:"أوقات العمل",nav_quote:"طلب عرض سعر",
+    hero_tag:"ورشة سيارات احترافية",hero_title:"سيارتك",hero_title_span:"كأنها جديدة",
+    hero_sub:"HZ Entreprise، خبيرك الموثوق في إصلاح هياكل السيارات. إصلاح، طلاء، إزالة الغمازات — نعيد سيارتك إلى أفضل حالاتها بدقة واحترافية.",
+    hero_cta1:"طلب عرض سعر",hero_cta2:"خدماتنا",
+    stat1:"رضا العملاء",stat2:"سيارة تم إصلاحها",stat3:"سنوات خبرة",
+    services_label:"ما نقدمه",services_title:"خدماتنا",
+    services_sub:"أعمال عالية الجودة لجميع أنواع المركبات، يقوم بها محترفون معتمدون.",
+    s1_name:"إزالة الغمازات والتقويم",s1_desc:"إعادة تشكيل هيكل سيارتك بعد الاصطدام بنتيجة مثالية ودائمة.",
+    s2_name:"الطلاء واللمسات الأخيرة",s2_desc:"تطبيق الطلاء بألوان متطابقة، إصلاحات موضعية أو طلاء كامل للسيارة.",
+    s3_name:"استبدال القطع",s3_desc:"استبدال الصدامات والأجنحة والأبواب وجميع عناصر الهيكل التالفة.",
+    s4_name:"معالجة الصدأ",s4_desc:"حماية ومعالجة الصدأ لإطالة عمر هيكل سيارتك.",
+    s5_name:"التلميع والصقل",s5_desc:"استعادة لمعة طلاء سيارتك وإزالة الخدوش الدقيقة والحصول على تشطيب لامع.",
+    s6_name:"التقييم وعرض السعر",s6_desc:"تقييم مجاني للأضرار وإعداد عرض سعر مفصل وشفاف.",
+    hours_label:"أوقات العمل",hours_title:"أوقات الزيارة",
+    hours_sub:"ورشتنا مفتوحة من الاثنين إلى الجمعة. تفضل بزيارتنا أو اتصل بنا لتحديد موعد.",
+    hours_open:"مفتوح اليوم",
+    day_mon:"الاثنين",day_tue:"الثلاثاء",day_wed:"الأربعاء",day_thu:"الخميس",day_fri:"الجمعة",day_sat:"السبت",day_sun:"الأحد",closed:"مغلق",
+    contact_label:"تواصل معنا",contact_title:"عرض سعر مجاني",
+    contact_sub:"املأ النموذج أو تواصل معنا مباشرة. سنرد عليك في أقرب وقت ممكن.",
+    addr_label:"العنوان",phone_label:"الهاتف",email_label:"البريد الإلكتروني",
+    form_name:"الاسم الأول والأخير",form_name_ph:"محمد علي",
+    form_phone:"الهاتف",form_phone_ph:"06 00 00 00 00",
+    form_email:"البريد الإلكتروني",form_email_ph:"بريدك@example.com",
+    form_service:"نوع الخدمة",form_service_default:"اختر خدمة",
+    form_msg:"الرسالة",form_msg_ph:"صف سيارتك والأضرار الملاحظة...",
+    form_send:"إرسال الطلب →",form_sent:"✓ تم إرسال الرسالة!",
+    footer_rights:"جميع الحقوق محفوظة"
+  },
+  it: {
+    nav_home:"Home",nav_services:"Servizi",nav_hours:"Orari",nav_quote:"Preventivo gratuito",
+    hero_tag:"Carrozzeria Professionale",hero_title:"Il Tuo Veicolo",hero_title_span:"Come Nuovo",
+    hero_sub:"HZ Entreprise, il tuo esperto di carrozzeria di fiducia. Riparazione, verniciatura, raddrizzatura — ridiamo vita al tuo veicolo con precisione e cura.",
+    hero_cta1:"Richiedi un preventivo",hero_cta2:"I nostri servizi",
+    stat1:"Soddisfazione cliente",stat2:"Veicoli riparati",stat3:"Anni di esperienza",
+    services_label:"Cosa facciamo",services_title:"I Nostri Servizi",
+    services_sub:"Interventi di qualità per tutti i tipi di veicoli, eseguiti da professionisti certificati.",
+    s1_name:"Ammaccature e Raddrizzatura",s1_desc:"Rimessa in forma della carrozzeria dopo urti o graffi, con risultati impeccabili e duraturi.",
+    s2_name:"Verniciatura e Ritocco",s2_desc:"Applicazione di vernice con tinta identica, ritocchi localizzati o verniciatura completa del veicolo.",
+    s3_name:"Sostituzione di Parti",s3_desc:"Sostituzione di paraurti, parafanghi, portiere e tutti gli elementi di carrozzeria danneggiati.",
+    s4_name:"Trattamento Antiruggine",s4_desc:"Protezione e trattamento della ruggine per prolungare la vita della carrozzeria.",
+    s5_name:"Lucidatura e Brillantatura",s5_desc:"Ripristino della lucentezza della vernice, eliminazione dei micro-graffi e finitura brillante.",
+    s6_name:"Perizia e Preventivo",s6_desc:"Valutazione gratuita dei danni e redazione di un preventivo dettagliato e trasparente.",
+    hours_label:"I nostri orari",hours_title:"Quando Trovarci",
+    hours_sub:"La nostra officina è aperta dal lunedì al venerdì. Vieni a trovarci o chiamaci per fissare un appuntamento.",
+    hours_open:"Aperto oggi",
+    day_mon:"Lunedì",day_tue:"Martedì",day_wed:"Mercoledì",day_thu:"Giovedì",day_fri:"Venerdì",day_sat:"Sabato",day_sun:"Domenica",closed:"Chiuso",
+    contact_label:"Contattaci",contact_title:"Preventivo Gratuito",
+    contact_sub:"Compila il modulo o contattaci direttamente. Ti risponderemo il prima possibile.",
+    addr_label:"Indirizzo",phone_label:"Telefono",email_label:"Email",
+    form_name:"Nome e Cognome",form_name_ph:"Mario Rossi",
+    form_phone:"Telefono",form_phone_ph:"06 00 00 00 00",
+    form_email:"Email",form_email_ph:"tua@email.com",
+    form_service:"Tipo di servizio",form_service_default:"Scegli un servizio",
+    form_msg:"Messaggio",form_msg_ph:"Descrivi il tuo veicolo e i danni riscontrati...",
+    form_send:"Invia la richiesta →",form_sent:"✓ Messaggio inviato!",
+    footer_rights:"Tutti i diritti riservati"
+  }
+};
+
+const langMeta = {
+  fr: { flag:'🇫🇷', label:'Français' },
+  en: { flag:'🇬🇧', label:'English' },
+  ar: { flag:'🇸🇦', label:'العربية' },
+  it: { flag:'🇮🇹', label:'Italiano' }
+};
+
+let currentLang = 'fr';
+
+function applyLang(lang) {
+  const t = T[lang];
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+
+  document.getElementById('currentFlag').textContent = langMeta[lang].flag;
+  document.getElementById('currentLabel').textContent = langMeta[lang].label;
+  document.querySelectorAll('.lang-option').forEach(o => o.classList.toggle('active', o.dataset.lang === lang));
+}
+
+const switcher = document.getElementById('langSwitcher');
+document.getElementById('langBtn').addEventListener('click', e => { e.stopPropagation(); switcher.classList.toggle('open'); });
+document.querySelectorAll('.lang-option').forEach(o => {
+  o.addEventListener('click', () => { applyLang(o.dataset.lang); switcher.classList.remove('open'); });
+});
+document.addEventListener('click', () => switcher.classList.remove('open'));
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+// Form
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.btn-submit');
+  btn.textContent = T[currentLang].form_sent;
+  btn.style.background = '#22c55e';
+  setTimeout(() => { btn.textContent = T[currentLang].form_send; btn.style.background = ''; e.target.reset(); }, 3000);
+}
+
+// Nav highlight
+window.addEventListener('scroll', () => {
+  let cur = '';
+  document.querySelectorAll('section[id]').forEach(s => { if(window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  document.querySelectorAll('.nav-links a').forEach(a => { a.style.color = a.getAttribute('href') === '#'+cur ? 'var(--red)' : ''; });
+});
+</script>
+</body>
+</html>
